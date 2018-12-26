@@ -50,8 +50,10 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../main.cpp 
-OBJECTS       = main.o
+SOURCES       = ../main.cpp \
+		../storage.cpp 
+OBJECTS       = main.o \
+		storage.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -120,7 +122,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../../game2.pro  ../main.cpp
+		../../game2.pro storage.h ../main.cpp \
+		../storage.cpp
 QMAKE_TARGET  = game2
 DESTDIR       = 
 TARGET        = game2
@@ -314,8 +317,11 @@ compiler_clean:
 
 ####### Compile
 
-main.o: ../main.cpp 
+main.o: ../main.cpp ../storage.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
+
+storage.o: ../storage.cpp ../storage.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o storage.o ../storage.cpp
 
 ####### Install
 

@@ -2,7 +2,16 @@
 #define STORAGE_H
 #include <string>
 #include <sqlite3.h>
+#include <time.h>
+#include <vector>
 
+
+struct record_db
+{
+	std::string name;
+	int value;
+	std::string date;
+};
 
 class Storage
 {
@@ -12,10 +21,9 @@ private:
 public:
 	Storage();
 	Storage(std::string name, std::string database);
-	get_last_record();
-	get_records(int count);
-	get_curent_record();
-	add_record(int value);
+	record_db get_last_record();
+	std::vector<record_db> get_records(int count);
+	void add_record(int value);
 	~Storage();
 };
 

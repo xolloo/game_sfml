@@ -21,7 +21,7 @@ int main()
 	sqlite3* DB;
 	int exit = 0;
 	exit = sqlite3_open("example.db", &DB);
-	string data("CALLBACK FUNCTION");
+	sqlite3_stmt *stmt;
 
 	string sql("SELECT * FROM PERSON;");
 	if (exit) {
@@ -31,13 +31,20 @@ int main()
 	else
 		std::cout << "Opened Database Successfully!" << std::endl;
 
-	int rc = sqlite3_exec(DB, sql.c_str(), callback, (void*)data.c_str(), NULL);
-
-	if (rc != SQLITE_OK)
-		cerr << "Error SELECT" << endl;
-	else {
-		cout << "Operation OK!" << endl;
+	// int rc = sqlite3_exec(DB, sql.c_str(), callback, (void*)data.c_str(), NULL);
+	sqlite3_prepare(DB, sql.c_str(), sizeof sql, &stmt, NULL);
+	while (sqlite3_step (stmt) == SQLITE_ROW)
+	{
+		printf("%s ", sqlite3_column_text(stmt, 0));
+		printf("%s ", sqlite3_column_text(stmt, 1));
+		printf("%s ", sqlite3_column_text(stmt, 2));
+		printf("%s\n", sqlite3_column_text(stmt, 3));
 	}
+	// if (rc != SQLITE_OK)
+	// 	cerr << "Error SELECT" << endl;
+	// else {
+	// 	cout << "Operation OK!" << endl;
+	// }
 
 	sqlite3_close(DB);
 	return (0);

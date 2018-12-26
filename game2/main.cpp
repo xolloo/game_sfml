@@ -1,7 +1,11 @@
+#include "storage.h"
 #include <SFML/Graphics.hpp>
 #include <time.h>
 #include <sstream>
 #include <iostream>
+
+#define NAME "super user"
+#define DATABASE "game.bd"
 
 
 using namespace sf;
@@ -34,6 +38,11 @@ int main() {
 	keyboardtabl.loadFromFile("../images/KeyboardTabl.png");
 	leaderboard.loadFromFile("../images/LeaderTabl.png");
 	test.loadFromFile("../images/test.png");
+
+	Storage *storage;
+	storage = new Storage(NAME, DATABASE);
+
+
 	Sprite sHero(hero), sNb(nb), sBackground(background);
 	Sprite sGameover(gameover), sR(r), sKeyboardtabl(keyboardtabl);
 	Sprite sLeaderboard(leaderboard), sTest(test);
