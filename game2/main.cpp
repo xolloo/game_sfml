@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <time.h>
 #include <sstream>
+#include <vector>
 #include <iostream>
 
 #define NAME "super user"
@@ -24,12 +25,16 @@ int main() {
 			Style::Fullscreen);
 	app.setFramerateLimit(60);
 	int playerScore = 0;
-	std::ostringstream playerScoreString;
+	std::ostringstream playerScoreString, recordsString;
 	Font font;
 	font.loadFromFile("../CyrilicOld.TTF");
 	Text text("", font, 40);
 	text.setStyle(sf::Text::Bold | sf::Text::Underlined);
-	Texture hero, nb, background, gameover, r, keyboardtabl, leaderboard, test;
+	Text curent_records("", font, 30);
+	curent_records.setStyle(sf::Text::Bold | sf::Text::Underlined);
+	Texture hero, nb, background;
+	Texture gameover, r, keyboardtabl;
+	Texture leaderboard, test;
 	background.loadFromFile("../images/back.png");
 	nb.loadFromFile("../images/nb.png");
 	hero.loadFromFile("../images/hero.png");
@@ -41,7 +46,8 @@ int main() {
 
 	Storage *storage;
 	storage = new Storage(NAME, DATABASE);
-
+	std::vector<record_db> records;
+	records = storage->get_records(7);
 
 	Sprite sHero(hero), sNb(nb), sBackground(background);
 	Sprite sGameover(gameover), sR(r), sKeyboardtabl(keyboardtabl);
@@ -79,6 +85,7 @@ int main() {
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Escape))
 		{
+			storage->add_record(playerScore);
 			app.close();
 		}
 		dy += speed;
@@ -121,6 +128,17 @@ int main() {
 		text.setString("Your points = " + playerScoreString.str());
 		text.setPosition(1400, 100);
 		app.draw(text);
+
+		recordsString.str("");
+		for (int i=0; i<records.size(); ++i)
+		{
+			recordsString << i+1 << ". ";
+			recordsString << records[i].name << ", ";
+			recordsString << records[i].value << '\n';
+		}
+		curent_records.setString(recordsString.str());
+		curent_records.setPosition(120, 700);
+		app.draw(curent_records);
 		for (int i = 0; i < 15; i++)
 		{
 			sNb.setPosition(plat[i].x, plat[i].y);
@@ -136,6 +154,7 @@ int main() {
 			if (Keyboard::isKeyPressed(Keyboard::R))
 			{
 				dy = -delta;
+				storage->add_record(playerScore);
 				playerScore = 0;
 				delta = 15;
 				speed = 0.2;
